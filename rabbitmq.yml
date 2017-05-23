@@ -16,6 +16,7 @@
        - autoconf
        - java-1.8.0-openjdk-devel
        - wget
+       - python-pip
 
     - name: Download Erlang Repository
       get_url:
@@ -42,3 +43,6 @@
       yum: name=/opt/rabbitmq.rpm
     
     - service: name=rabbitmq-server state=started enabled=yes
+
+    - name:  Install pip's pika module
+      pip: name=pika
