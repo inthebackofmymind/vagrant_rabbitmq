@@ -17,6 +17,7 @@
        - java-1.8.0-openjdk-devel
        - wget
        - python-pip
+       - lynx 
 
     - name: Download Erlang Repository
       get_url:
