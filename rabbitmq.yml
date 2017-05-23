@@ -1,0 +1,45 @@
+---
+- hosts: node1
+  become: true 
+  tasks:
+    - yum: name={{item}} state=present update_cache=yes
+      with_items:
+       - nmap 
+       - epel-release
+       - git
+       - gcc
+       - gcc-c++
+       - glibc-devel
+       - make
+       - ncurses-devel
+       - openssl-devel
+       - autoconf
+       - java-1.8.0-openjdk-devel
+       - wget
+       - wxBase.x86_64
+
+     - name: Download Erlang Repository
+       get_url:
+         url: http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+         dest: /opt/erlang.rpm
+         mode: 0777
+
+     - name: Add Erlang Repository (RPM)
+       yum: name=/opt/erlang.rpm state=present update_cache=yes
+      
+     - name: Install Erlang
+       yum: name=erlang state=present update_cache=yes 
+     
+     - name: Download Rabbitmq Repository
+       get_url:
+         url: https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm 
+         dest: /opt/rabbitmq.rpm
+         mode: 0777
+
+     - name: Install Rabbitmq Key
+       rpm_key: state=present key=https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+
+     - name: Install Rabbitmq Software
+       yum: name=/opt/rabbitmq.rpm
+    
+    - service: name=rabbitmq-server state=started enabled=yes
